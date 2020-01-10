@@ -5,9 +5,6 @@
         "add_player"
     ],
     "current": {
-        "property": {
-            "is_for_sale": false    
-        },
         "roll": {
             "has_rolled": false,
             "die1": 0,
@@ -18,8 +15,7 @@
         "player":{
             "id": null,
             "name": null,
-            "balance": 1500,
-            "properties": []
+            "balance": 1500
         }
     },
     "players": [],

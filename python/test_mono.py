@@ -1,70 +1,111 @@
 import unittest
-from mono import is_for_sale, buy
+from mono import new_position, buy
 
 class TestGameActions(unittest.TestCase):
-    
-    def test_is_for_sale_true_1(self):
-        state = {
-            "current": {
-                "property": {
-                    "owner": None,
-                    "mortgaged": False,
-                    "special": False,
-                    "price": 100
-                }
-            },
-            "messages": []
-        }
-
-        res = is_for_sale(state)
-        # print(res)
-        msgs = ["This property is for sale for a price of $100."]
-        self.assertEqual(msgs, res['messages'])
-        self.assertTrue(res['current']['property']['is_for_sale'])
-
-    def test_is_for_sale_false_2(self):
-        state = {
-            "current": {
-                "property": {
-                    "owner": "q23123123-1231",
-                    "special": False,
-                    "price": 400
-                }
-            },
-            "messages": []
-        }
-
-        res = is_for_sale(state)
-        msgs = ["This property is for sale for a price of $400."]
-        self.assertEqual(msgs, res['messages'])
-        self.assertFalse(res['current']['property']['is_for_sale'])
-    
-    def test_is_for_sale_false_2(self):
-        state = {
-            "current": {
-                "property": {
-                    "owner": False,
-                    "special": "nope"
-                }
-            }
-        }
-
-        res = is_for_sale(state)
-
-        self.assertFalse(res['current']['property']['is_for_sale'])
-    
-    # buy
-    def get_current_property(self):
-        state = {
+    def test_new_position_1(self):
+        mock_state = {
             "current": {
                 "player": {
-                    "pos": 12
+                    "pos": 0,
+                    "name": "Bob"
+                },
+                "roll": {
+                    "die1": 1,
+                    "die2": 2
                 }
             },
             "board": [
-                
-            ]
+                {
+                    "name": "OG prop",
+                    "price": 60
+                },
+                {
+                    "name": "First prop",
+                    "price": 60
+                },
+                {
+                    "name": "Second prop",
+                    "price": 120
+                },
+                {
+                    "name": "Third Prop",
+                    "price": 100
+                }
+            ],
+            "messages": []
         }
+
+        res = new_position(mock_state)
+        
+        self.assertEqual(3, res['current']['player']['pos'])
+        self.assertEqual("Bob is now on Third Prop.", res['messages'][0])
+        self.assertEqual("This property is for sale for a price of $100.",res['messages'][1])
+        self.assertTrue(res['board'][3]['is_for_sale'])
+
+    def test_new_position_2(self):
+        mock_state = {
+            "current": {
+                "player": {
+                    "pos": 0,
+                    "name": "Bob"
+                },
+                "roll": {
+                    "die1": 1,
+                    "die2": 1
+                }
+            },
+            "board": [
+                {
+                    "name": "OG Prop",
+                    "special": "og_property"
+                },
+                {
+                    "name": "First Prop",
+                    "price": 60
+                },
+                {
+                    "name": "Specialty Prop",
+                    "special": True,
+                },
+                {
+                    "name": "Third Prop",
+                    "price": 100
+                }
+            ],
+            "messages": []
+        }
+
+        res = new_position(mock_state)
+        
+        self.assertEqual(2, res['current']['player']['pos'])
+        self.assertEqual("Bob is now on Specialty Prop.", res['messages'][0])
+        self.assertEqual(1, len(res['messages']))
+        self.assertFalse(res['board'][2]['is_for_sale'])
+    
+
+    def test_buy_1(self):
+        mock_state = {
+            "current": {
+                "player": {
+                    "pos": 1,
+                    "balance": 1000
+                }
+            },
+            "board": [
+                {
+                    "name": "OG Prop",
+                    "special": "og_property"
+                },
+                {
+                    "name": "Buy Me Yo",
+                    "price": 100,
+                }
+            ],
+            "messages": []
+        }
+
+        res = buy(mock_state)
+
 
 
 if __name__ == '__main__':
