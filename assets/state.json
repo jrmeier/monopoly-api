@@ -1,0 +1,27 @@
+{
+    "has_started": false,
+    "messages": [],
+    "actions": [
+        "add_player"
+    ],
+    "current": {
+        "property": {
+            "is_for_sale": false    
+        },
+        "roll": {
+            "has_rolled": false,
+            "die1": 0,
+            "die2": 0,
+            "is_double": false,
+            "double_count": 0
+        },
+        "player":{
+            "id": null,
+            "name": null,
+            "balance": 1500,
+            "properties": []
+        }
+    },
+    "players": [],
+    "board": []
+}

@@ -1,0 +1,515 @@
+[
+   {
+      "name": "Go",
+      "loc": 0,
+      "special": "go",
+      "action": "$this.player.balance+200"
+   },
+   {
+      "name": "Mediterranean Avenue",
+      "loc": 1,
+      "price": 60,
+      "mortgage": 30,
+      "building": 50,
+      "group": 1,
+      "rent": [
+         2,
+         4,
+         10,
+         30,
+         90,
+         160,
+         250
+      ]
+   },
+   {
+      "name": "Community Chest",
+      "loc": 2,
+      "special": "cc"
+   },
+   {
+      "name": "Baltic Avenue",
+      "loc": 3,
+      "price": 60,
+      "mortgage": 30,
+      "building": 50,
+      "group": 1,
+      "rent": [
+         4,
+         8,
+         20,
+         60,
+         180,
+         320,
+         450
+      ]
+   },
+   {
+      "name": "Income Tax",
+      "loc": 4,
+      "action": "$this.player.balance - 200"
+   },
+   {
+      "name": "Reading Railroad",
+      "loc": 5,
+      "price": 200,
+      "mortgage": 100,
+      "building": 0,
+      "group": 9,
+      "rent": [
+         25,
+         50,
+         100,
+         200
+      ]
+   },
+   {
+      "name": "Oriental Avenue",
+      "loc": 6,
+      "price": 100,
+      "mortgage": 50,
+      "building": 50,
+      "group": 2,
+      "rent": [
+         6,
+         12,
+         30,
+         90,
+         270,
+         400,
+         550
+      ]
+   },
+   {
+      "name": "Chance",
+      "loc": 7,
+      "special": "chance",
+      "action": "chance.random"
+   },
+   {
+      "name": "Vermont Avenue",
+      "loc": 8,
+      "price": 100,
+      "mortgage": 50,
+      "building": 50,
+      "group": 2,
+      "rent": [
+         6,
+         12,
+         30,
+         90,
+         270,
+         400,
+         550
+      ]
+   },
+   {
+      "name": "Connecticut Avenue",
+      "loc": 9,
+      "price": 120,
+      "mortgage": 60,
+      "building": 50,
+      "group": 2,
+      "rent": [
+         8,
+         16,
+         40,
+         100,
+         300,
+         450,
+         600
+      ]
+   },
+   {
+      "name": "Just Visiting",
+      "loc": 10,
+      "special": "just_visiting"
+   },
+   {
+      "name": "St. Charles Place",
+      "loc": 11,
+      "price": 140,
+      "mortgage": 70,
+      "building": 100,
+      "group": 3,
+      "rent": [
+         10,
+         20,
+         50,
+         150,
+         450,
+         625,
+         750
+      ]
+   },
+   {
+      "name": "Electric Company",
+      "loc": 12,
+      "price": 150,
+      "mortgage": 75,
+      "building": 0,
+      "group": 10,
+      "special": "utility"
+   },
+   {
+      "name": "States Avenue",
+      "loc": 13,
+      "price": 140,
+      "mortgage": 70,
+      "building": 100,
+      "group": 3,
+      "rent": [
+         10,
+         20,
+         50,
+         150,
+         450,
+         625,
+         750
+      ]
+   },
+   {
+      "name": "Virgina Avenue",
+      "loc": 14,
+      "price": 160,
+      "mortgage": 80,
+      "building": 100,
+      "group": 3,
+      "rent": [
+         12,
+         24,
+         60,
+         180,
+         500,
+         700,
+         900
+      ]
+   },
+   {
+      "name": "Pennsylvania Railroad",
+      "loc": 15,
+      "price": 200,
+      "mortgage": 100,
+      "building": 0,
+      "group": 9,
+      "rent": [
+         25,
+         50,
+         100,
+         200
+      ]
+   },
+   {
+      "name": "St. James Place",
+      "loc": 16,
+      "price": 180,
+      "mortgage": 90,
+      "building": 100,
+      "group": 4,
+      "rent": [
+         14,
+         28,
+         70,
+         200,
+         550,
+         750,
+         950
+      ]
+   },
+   {
+      "name": "Community Chest",
+      "loc": 17,
+      "special": "cc"
+   },
+   {
+      "name": "Tennessee Avenue",
+      "loc": 18,
+      "price": 180,
+      "mortgage": 90,
+      "building": 100,
+      "group": 4,
+      "rent": [
+         14,
+         28,
+         70,
+         200,
+         550,
+         750,
+         950
+      ]
+   },
+   {
+      "name": "New York Avenue",
+      "loc": 19,
+      "price": 200,
+      "mortgage": 100,
+      "building": 100,
+      "group": 4,
+      "rent": [
+         16,
+         32,
+         80,
+         220,
+         600,
+         800,
+         1000
+      ]
+   },
+   {
+      "name": "Free Parking",
+      "loc": 20,
+      "special": "free_parking"
+   },
+   {
+      "name": "Kentucky Avenue",
+      "loc": 21,
+      "price": 220,
+      "mortgage": 110,
+      "building": 150,
+      "group": 5,
+      "rent": [
+         18,
+         36,
+         90,
+         250,
+         700,
+         875,
+         1050
+      ]
+   },
+   {
+      "name": "Chance",
+      "loc": 22,
+      "special": "chance",
+      "action": "chance.random"
+   },
+   {
+      "name": "Indiana Avenue",
+      "loc": 23,
+      "price": 220,
+      "mortgage": 110,
+      "building": 150,
+      "group": 5,
+      "rent": [
+         18,
+         36,
+         90,
+         250,
+         700,
+         875,
+         1050
+      ]
+   },
+   {
+      "name": "Illinois Avenue",
+      "loc": 24,
+      "price": 240,
+      "mortgage": 120,
+      "building": 150,
+      "group": 5,
+      "rent": [
+         20,
+         40,
+         100,
+         300,
+         750,
+         925,
+         1100
+      ]
+   },
+   {
+      "name": "B. & O. Railroad",
+      "loc": 25,
+      "price": 200,
+      "mortgage": 100,
+      "building": 0,
+      "group": 9,
+      "rent": [
+         25,
+         50,
+         100,
+         200
+      ]
+   },
+   {
+      "name": "Atlantic Avenue",
+      "loc": 26,
+      "price": 260,
+      "mortgage": 130,
+      "building": 150,
+      "group": 6,
+      "rent": [
+         22,
+         44,
+         110,
+         330,
+         800,
+         975,
+         1150
+      ]
+   },
+   {
+      "name": "Ventnor Avenue",
+      "loc": 27,
+      "price": 260,
+      "mortgage": 130,
+      "building": 150,
+      "group": 6,
+      "rent": [
+         22,
+         44,
+         110,
+         330,
+         800,
+         975,
+         1150
+      ]
+   },
+   {
+      "name": "Water Works",
+      "loc": 28,
+      "price": 150,
+      "mortgage": 75,
+      "building": 0,
+      "group": 10,
+      "special": "utility"
+   },
+   {
+      "name": "Marvin Gardens",
+      "loc": 29,
+      "price": 280,
+      "mortgage": 140,
+      "building": 150,
+      "group": 6,
+      "rent": [
+         24,
+         48,
+         120,
+         360,
+         850,
+         1025,
+         1200
+      ]
+   },
+   {
+      "name": "Go To Jail",
+      "loc": 30,
+      "special": "go_to_jail",
+      "action": "$this.user.pos=10"
+   },
+   {
+      "name": "Pacific Avenue",
+      "loc": 31,
+      "price": 300,
+      "mortgage": 150,
+      "building": 200,
+      "group": 7,
+      "rent": [
+         26,
+         52,
+         130,
+         390,
+         900,
+         1100,
+         1275
+      ]
+   },
+   {
+      "name": "North Carolina Avenue",
+      "loc": 32,
+      "price": 300,
+      "mortgage": 150,
+      "building": 200,
+      "group": 7,
+      "rent": [
+         26,
+         52,
+         130,
+         390,
+         900,
+         1100,
+         1275
+      ]
+   },
+   {
+      "name": "Community Chest",
+      "loc": 33,
+      "special": "cc"
+   },
+   {
+      "name": "Pennsylvania Avenue",
+      "loc": 34,
+      "price": 320,
+      "mortgage": 160,
+      "building": 200,
+      "group": 7,
+      "rent": [
+         28,
+         56,
+         150,
+         450,
+         1000,
+         1200,
+         1400
+      ]
+   },
+   {
+      "name": "Short Line",
+      "loc": 35,
+      "price": 200,
+      "mortgage": 100,
+      "building": 0,
+      "group": 9,
+      "rent": [
+         25,
+         50,
+         100,
+         200
+      ]
+   },
+   {
+      "name": "Chance",
+      "loc": 37,
+      "special": "chance",
+      "action": "chance.random"
+   },
+   {
+      "name": "Park Place",
+      "loc": 38,
+      "price": 350,
+      "mortgage": 175,
+      "building": 200,
+      "group": 8,
+      "rent": [
+         35,
+         70,
+         175,
+         500,
+         1100,
+         1300,
+         1500
+      ]
+   },
+   {
+      "name": "Luxary Tax",
+      "loc": 39,
+      "special": "$this.user.balance-75"
+   },
+   {
+      "name": "Boardwalk",
+      "loc": 40,
+      "price": 400,
+      "mortgage": 200,
+      "building": 200,
+      "group": 8,
+      "rent": [
+         50,
+         100,
+         200,
+         600,
+         1400,
+         1700,
+         2000
+      ]
+   }
+]
