@@ -4,102 +4,36 @@ import uuid
 from copy import deepcopy
 from helpers import get_dot_notation as d
 
-
-# def is_for_sale(state):
-#     new_state = deepcopy(state)
-#     prop = new_state['current']['property']
-    
-#     # must not be marked by an owner
-#     # and must not be mortgaged
-#     # and include houses/
-
-#     if not prop.get('owner') and not prop.get('special'):
-#         prop['is_for_sale'] = True
-#         new_state['messages'].append(f"This property is for sale for a price of ${prop['price']}.")
-#     else:
-#         prop['is_for_sale'] = False
-    
-
-#     new_state['current']['property'] = prop
-    
-    # return new_state
-
-def buy(state):
+def add_player(state):
     new_state = deepcopy(state)
-    
-    board = new_state['board']
-    player = new_state['current']['player']
-    prop = board[player['pos']]
+    name = input("Name: ")
+    tokens = [
+        "dog",
+        "car",
+        "wheelbarrow",
+        "battleship",
+        "tophat",
+        "shoe"
+    ]
+    # token = input("Token: ")
+    token = None
+    if not token:
+        token = random.choice(tokens)
 
-    # must have enough money
-    if player['balance'] >= prop['price']:
-        prop['owner'] = player['id']
-        player['balance'] = player['balance'] - prop['price']
-        new_state['messages'].append(f"You have bought this property for ${prop['price']}")
-        # update the property and rent prices
-        determine_rent(state)
-    
-    else:
-        new_state['messages'].append("You don't have enough money!")
-    
-    new_state['current']['player'] = player
-    new_state['board'][player['pos']] = prop
-
+    player = {
+        "name": name,
+        "token": token,
+        "balance": 1500,
+        "pos": 0,
+    }
+    new_state['players'].append(player)
     return new_state
 
-
-def determine_rent(state):
-    
-    total_in_group = 0
-    total_owned = 0
-
-    for p in board:
-        if p['group'] == prop['group']:
-            total_in_group += 1
-             if p.get('owner') == prop['owner']:
-                 total_owned += 1
-    
-    has_monopoly = True if total_owned == total_owned else False
-
-    if has_monopoly and
-    
-
-
-    
-    total_owned = 0
-    for g in group:
-        if g.get('owner', None) == prop['ower']
-
-
-
-def new_position(state):
-    """
-    Get board position and information about that position
-    Also pay rent
-    """
+def start(state):
     new_state = deepcopy(state)
-    pos = new_state['current']['player']['pos']
-    roll = new_state['current']['roll']
+    new_state['has_started'] = True
+    new_state['current']['player'] = new_state['players'].pop(0)
 
-    new_position = roll['die1']+roll['die2'] + pos
-    prop = new_state['board'][new_position]
-
-
-    new_state['messages'].append(f"{new_state['current']['player']['name']} is now on {prop['name']}.")
-
-    if not prop.get('owner'):
-        if not prop.get('special'):
-            prop['is_for_sale'] = True
-            new_state['messages'].append(f"This property is for sale for a price of ${prop['price']}.")
-    else:
-        # pay the rent, it should be figured at the purchase!
-
-
-
-
-
-    new_state['current']['player']['pos'] = new_position
-    # new_state['board'][pos] = prop
     return new_state
 
 def roll(state):
@@ -117,30 +51,102 @@ def roll(state):
     }
 
     new_state['messages'].append(f"{new_state['current']['player']['name']} rolled a {die1+die2}.")
-    
-    return new_position(new_state)
 
-
-def add_player(state):
-    new_state = deepcopy(state)
-    name = input("Name: ")
+    new_state['next_actions'].append("new_position")
     
-    player = {
-        "name": name,
-        "id": str(uuid.uuid4()),
-        "balance": 1500,
-        "pos": 0,
-        "properties": []
-    }
-    new_state['players'].append(player)
     return new_state
 
-def start(state):
+def new_position(state):
+    """
+    Get information about this square
+    """
     new_state = deepcopy(state)
-    new_state['has_started'] = True
-    new_state['current']['player'] = new_state['players'].pop(0)
+    pos = new_state['current']['player']['pos']
+    roll = new_state['current']['roll']
+
+    new_position = roll['die1']+roll['die2'] + pos
+    prop = new_state['board'][new_position]
+
+    new_state['messages'].append(f"{new_state['current']['player']['name']} is now on {prop['name']}.")
+
+    if not prop.get('owner'):
+        if not prop.get('special'):
+            prop['is_for_sale'] = True
+            new_state['messages'].append(f"This property is for sale for a price of ${prop['price']}.")
+    else:
+        owner = prop.get('owner')
+    
+        if owner == new_state['current']['player']['token']:
+            new_state['messages'].append("They own this property.")
+        else:
+            new_state['messages'].append(f"This property is owned by {prop['owner']}.")
+            if prop.get('mortgaged'):
+                new_state['messages'].append(f"It's mortgaged, so there is no rent charge.")
+            else:
+                new_state['next_actions'].append('pay_rent')
+
+    new_state['current']['player']['pos'] = new_position
 
     return new_state
+
+
+def buy(state):
+    new_state = deepcopy(state)
+    
+    board = new_state['board']
+    player = new_state['current']['player']
+    prop = board[player['pos']]
+
+        
+    # must have enough money
+    if player['balance'] >= prop['price']:
+        prop['owner'] = player['token']
+        player['balance'] = player['balance'] - prop['price']
+        new_state['messages'].append(f"You have bought this property for ${prop['price']}")
+        # update the property and rent prices
+        # determine_rent(state)
+        prop['rent'] = determine_rent(state)
+    
+    else:
+        new_state['messages'].append("You don't have enough money!")
+    
+    new_state['current']['player'] = player
+    new_state['board'][player['pos']] = prop
+
+    return new_state
+
+
+def determine_rent(board):
+    """
+    sets the current_rent on each property on the board
+    """
+    new_board = deepcopy(board)
+
+    total_in_group = 0
+    total_owned = 0
+
+    for prop in new_board:
+        total_in_group = len([i for i, x in enumerate(new_board) if (x.get('group') and x.get('group') == prop.get("group"))])
+        total_owned = len([i for i, x in enumerate(new_board) if (x.get('owner') and x.get('owner') == prop.get("owner"))])
+        has_monopoly = True if (total_owned and total_owned == total_in_group) else False
+        upgrades = 0 if not prop.get('upgrades') else prop.get('upgrades')
+
+        rent_list = prop.get('rent', [])
+
+        if not rent_list:
+            prop['current_rent'] = 0
+
+        if not has_monopoly and rent_list: # do something special for RR and utils
+            prop['current_rent'] = rent_list[0]
+    
+        if has_monopoly and rent_list:
+            if not upgrades:
+                prop['current_rent'] = rent_list[1]
+            if upgrades:
+                prop['current_rent'] = rent_list[upgrades+1]
+    
+    return new_board
+
 
 def end_turn(state):
     # update the player
@@ -163,7 +169,6 @@ def update_actions(state):
     new_state = deepcopy(state)
     actions = ["quit","game"]
     # starting and adding players
-
 
 
     if len(state["players"]) >= 1 and not state["has_started"]:
