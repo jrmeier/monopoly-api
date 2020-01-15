@@ -569,7 +569,8 @@ class TestGameActions(unittest.TestCase):
                     ]
                 },
                 {}
-            ]
+            ],
+            "next_actions": []
         }
 
         res = mono.buy(mock_state)
@@ -628,7 +629,8 @@ class TestGameActions(unittest.TestCase):
                     ]
                 },
                 {}
-            ]
+            ],
+            "next_actions": []
         }
 
         res = mono.buy(mock_state)
@@ -636,6 +638,33 @@ class TestGameActions(unittest.TestCase):
         self.assertIsNone(res['board'][2].get('owner', None))
         self.assertEqual(res['current']['player']['balance'], 50)
         self.assertEqual(res['messages'][0], "You don't have enough money!")
+    
+    def test_end_turn(self):
+        mock_state = {
+            "current": {
+                "player": {
+                    "name": "Bob"
+                },
+                "roll": {
+                    "has_rolled": False,
+                    "die1": 1,
+                    "die2": 3
+                }
+            },
+            "players": [
+                {
+                    "name": "Tom",
+                }
+            ],
+            "messages":[]
+        }
+
+        res = mono.end_turn(mock_state)
+        
+        self.assertEqual(res['current']['player']['name'], 'Tom')
+        self.assertEqual(res['messages'], ["Bob's turn has ended.","It is now Tom's turn."])
+        self.assertEqual(res['players'],[{'name': 'Bob'}])
+        self.assertEqual(res['current']['roll']['has_rolled'], False)
         
 
 

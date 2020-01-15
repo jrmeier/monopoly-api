@@ -1,8 +1,10 @@
 import random
 import json
-import uuid
+import datetime
 from copy import deepcopy
+import os
 from helpers import get_dot_notation as d
+
 
 def add_player(state):
     new_state = deepcopy(state)
@@ -38,8 +40,8 @@ def start(state):
 
 def roll(state):
     new_state = deepcopy(state)
-    die1 = random.randint(0, 6)
-    die2 = random.randint(0, 6)
+    die1 = random.randint(1, 6)
+    die2 = random.randint(1, 6)
     is_double = True if die1 == die2 else False
 
     new_state['current']['roll'] = {
@@ -65,6 +67,10 @@ def new_position(state):
     roll = new_state['current']['roll']
 
     new_position = roll['die1']+roll['die2'] + pos
+
+    if new_position > 40:
+        new_position = new_position - 40
+        
     prop = new_state['board'][new_position]
 
     new_state['messages'].append(f"{new_state['current']['player']['name']} is now on {prop['name']}.")
@@ -89,11 +95,11 @@ def new_position(state):
 
     return new_state
 
-def determine_rent(board):
+def determine_rent(state):
     """
     sets the current_rent on each property on the board
     """
-    new_board = deepcopy(board)
+    new_board = deepcopy(state['board'])
 
     total_in_group = 0
     total_owned = 0
@@ -118,7 +124,8 @@ def determine_rent(board):
             if upgrades:
                 prop['current_rent'] = rent_list[upgrades+1]
     
-    return new_board
+    state['board'] = new_board
+    return state
 
 
 def buy(state):
@@ -134,6 +141,7 @@ def buy(state):
         prop['owner'] = player['token']
         player['balance'] = player['balance'] - prop['price']
         new_state['messages'].append(f"You have bought this property for ${prop['price']}")
+        new_state['next_actions'].append("determine_rent")
     else:
         new_state['messages'].append("You don't have enough money!")
     
@@ -145,12 +153,12 @@ def buy(state):
 def end_turn(state):
     # update the player
     new_state = deepcopy(state)
-    new_state['messages'].append(f"{new_state['current']['player']['name']}'s turn as ended.")
+    new_state['messages'].append(f"{new_state['current']['player']['name']}'s turn has ended.")
     new_state['players'].append(new_state['current']['player'])
     new_state['current']['roll']['has_rolled'] = False
     new_state['current']['player'] = new_state['players'].pop(0)
     
-    new_state['messages'].append(f" It is now {new_state['current']['player']['name']}'s turn.")
+    new_state['messages'].append(f"It is now {new_state['current']['player']['name']}'s turn.")
     return new_state
 
 def game(state):
@@ -161,6 +169,7 @@ def game(state):
 def update_actions(state):
     """ updates the available actions """
     new_state = deepcopy(state)
+    
     actions = ["quit","game"]
     # starting and adding players
 
@@ -173,11 +182,24 @@ def update_actions(state):
 
     # first roll of the game
     if state['has_started']:
+        board = new_state['board']
+        player = new_state['current']['player']
+        prop = board[player["pos"]]
+        
         if state['current']['roll']['double_count'] < 3 and not state['current']['roll']['has_rolled']:
             actions.append("roll")
 
-        if state['current']['property']['is_for_sale'] and not d(state, 'current.property.owner'):
+        # print("prop: ",prop)
+        # print("player: ", player)
+        # if state['current']['property']['is_for_sale'] and not d(state, 'current.property.owner'):
+        # if state['board'][['current']['player']['pos']]:
+        if not prop.get('owner') and not prop.get('special'):
             actions.append("buy")
+        # if board['']
+        # if prop['']
+        # print(state['board'])
+        # if state['board
+        # actions.append("buy")
 
     #should always be at the end
     if d(state, 'current.roll.has_rolled'):
@@ -191,15 +213,18 @@ def update_actions(state):
 
 def play():
     # check the game state for available actions
-
+    date_string =datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
+    game_filename = f"../games/{date_string}.json"
     with open("../assets/state.json","r") as state_file:
         state = json.load(state_file)
     
     with open("../assets/board.json",'r') as board_file:
         state['board'] = json.load(board_file)
 
+
     player_action = ""
     while player_action != "quit":
+
         print("\nActions:")
         for action in state['actions']:
             print(f"\t{action}")
@@ -213,10 +238,23 @@ def play():
             state = eval(player_action)(state)
             state = update_actions(state)
 
-        for m in state['messages']:
-            print(m)     
+        for na in state['next_actions']:
+            state = eval(na)(state)
+            state = update_actions(state)
+            # for m in state['messages']:
+            #     print(m)
+
         
+        for m in state['messages']:
+            print(m)
+
+        state['next_actions'] = []
         state['messages'] = []
+
+        with open(game_filename,'w') as game_file:
+            game_file.write(json.dumps(state, indent=3))
+
+
 
 if __name__ == "__main__":
     play()

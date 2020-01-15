@@ -4,7 +4,9 @@
     "actions": [
         "add_player"
     ],
+    "next_actions": [],
     "current": {
+        "pos": 0,
         "roll": {
             "has_rolled": false,
             "die1": 0,
