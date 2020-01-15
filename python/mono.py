@@ -89,33 +89,6 @@ def new_position(state):
 
     return new_state
 
-
-def buy(state):
-    new_state = deepcopy(state)
-    
-    board = new_state['board']
-    player = new_state['current']['player']
-    prop = board[player['pos']]
-
-        
-    # must have enough money
-    if player['balance'] >= prop['price']:
-        prop['owner'] = player['token']
-        player['balance'] = player['balance'] - prop['price']
-        new_state['messages'].append(f"You have bought this property for ${prop['price']}")
-        # update the property and rent prices
-        # determine_rent(state)
-        prop['rent'] = determine_rent(state)
-    
-    else:
-        new_state['messages'].append("You don't have enough money!")
-    
-    new_state['current']['player'] = player
-    new_state['board'][player['pos']] = prop
-
-    return new_state
-
-
 def determine_rent(board):
     """
     sets the current_rent on each property on the board
@@ -147,6 +120,27 @@ def determine_rent(board):
     
     return new_board
 
+
+def buy(state):
+    new_state = deepcopy(state)
+    
+    board = new_state['board']
+    player = new_state['current']['player']
+    prop = board[player['pos']]
+
+        
+    # must have enough money
+    if player['balance'] >= prop['price']:
+        prop['owner'] = player['token']
+        player['balance'] = player['balance'] - prop['price']
+        new_state['messages'].append(f"You have bought this property for ${prop['price']}")
+    else:
+        new_state['messages'].append("You don't have enough money!")
+    
+    new_state['current']['player'] = player
+    new_state['board'][player['pos']] = prop
+
+    return new_state
 
 def end_turn(state):
     # update the player

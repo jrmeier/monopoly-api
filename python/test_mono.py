@@ -3,6 +3,7 @@ import builtins
 from unittest.mock import patch
 import mono
 import json
+import random
     
 class TestGameActions(unittest.TestCase):
     @patch('builtins.input')
@@ -469,6 +470,174 @@ class TestGameActions(unittest.TestCase):
             ]
         board = mono.determine_rent(mock_board)
         self.assertEqual(board[2]['current_rent'], 250)
+
+    def test_determine_rent_upgrades_random(self):
+        upgrades = random.randint(2,5)
+        mock_board = [
+                {},
+                {},
+                {
+                    "name": "Happy Trees",
+                    "loc": 2,
+                    "price": 100,
+                    "owner": "mock_token",
+                    "mortgage": 30,
+                    "building": 50,
+                    "upgrades": upgrades,
+                    "group": 1,
+                    "rent": [
+                        2,
+                        4,
+                        10,
+                        30,
+                        90,
+                        160,
+                        250
+                    ]
+                },
+                {
+                    "name": "Happy Clouds",
+                    "loc": 3,
+                    "price": 100,
+                    "owner": "mock_token",
+                    "mortgage": 30,
+                    "building": 50,
+                    "upgrades": 5,
+                    "group": 1,
+                    "rent": [
+                        2,
+                        4,
+                        10,
+                        30,
+                        90,
+                        160,
+                        450
+                    ]
+                },
+                {}
+            ]
+        board = mono.determine_rent(mock_board)
+        self.assertEqual(board[2]['current_rent'], mock_board[2]['rent'][upgrades+1])
+    
+    def test_buy_1(self):
+        mock_state = {
+            "current": {
+                "player": {
+                    "pos": 2,
+                    "balance": 900,
+                    "token": "car"
+                }
+            },
+            "messages": [],
+            "board": [
+                {},
+                {},
+                {
+                    "name": "Happy Trees",
+                    "loc": 2,
+                    "price": 100,
+                    "mortgage": 30,
+                    "building": 50,
+                    "upgrades": 0,
+                    "group": 1,
+                    "rent": [
+                        2,
+                        4,
+                        10,
+                        30,
+                        90,
+                        160,
+                        250
+                    ]
+                },
+                {
+                    "name": "Happy Clouds",
+                    "loc": 3,
+                    "price": 100,
+                    "mortgage": 30,
+                    "building": 50,
+                    "upgrades": 0,
+                    "group": 1,
+                    "rent": [
+                        2,
+                        4,
+                        10,
+                        30,
+                        90,
+                        160,
+                        450
+                    ]
+                },
+                {}
+            ]
+        }
+
+        res = mono.buy(mock_state)
+
+        self.assertEqual(res['board'][2]['owner'], 'car')
+        self.assertEqual(res['current']['player']['balance'], 800)
+        self.assertEqual(res['messages'][0], 'You have bought this property for $100')
+
+    def test_buy_2(self):
+        mock_state = {
+            "current": {
+                "player": {
+                    "pos": 2,
+                    "balance": 50,
+                    "token": "car"
+                }
+            },
+            "messages": [],
+            "board": [
+                {},
+                {},
+                {
+                    "name": "Happy Trees",
+                    "loc": 2,
+                    "price": 100,
+                    "mortgage": 30,
+                    "building": 50,
+                    "upgrades": 0,
+                    "group": 1,
+                    "rent": [
+                        2,
+                        4,
+                        10,
+                        30,
+                        90,
+                        160,
+                        250
+                    ]
+                },
+                {
+                    "name": "Happy Clouds",
+                    "loc": 3,
+                    "price": 100,
+                    "mortgage": 30,
+                    "building": 50,
+                    "upgrades": 0,
+                    "group": 1,
+                    "rent": [
+                        2,
+                        4,
+                        10,
+                        30,
+                        90,
+                        160,
+                        450
+                    ]
+                },
+                {}
+            ]
+        }
+
+        res = mono.buy(mock_state)
+
+        self.assertIsNone(res['board'][2].get('owner', None))
+        self.assertEqual(res['current']['player']['balance'], 50)
+        self.assertEqual(res['messages'][0], "You don't have enough money!")
+        
+
 
 if __name__ == '__main__':
     unittest.main()

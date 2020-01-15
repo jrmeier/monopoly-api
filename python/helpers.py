@@ -18,6 +18,6 @@ def get_dot_notation(obj, dot_string):
     if obj.get(dot_split[0]):
         new_obj = obj[dot_split[0]]
         new_dot_string = dot_split[1:].pop()
-        return d(new_obj, new_dot_string)
+        return get_dot_notation(new_obj, new_dot_string)
 
     return None
